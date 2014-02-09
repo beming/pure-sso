@@ -1,0 +1,170 @@
+.navg {
+	border-top: 1px #F2F7FD solid;
+	border-bottom: 1px #f3ffe3 solid;
+}
+
+.navg .mainNavg {
+	height: 35px;
+	background-color: #f3ffe3;
+	background: url("/images/navg.gif") repeat-x top;
+}
+
+.navg .mainNavg UL {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.navg .mainNavg UL LI {
+	float: left;	
+	background-color: #f3ffe3;
+	background: url(/images/tab_right.gif) no-repeat right top;
+	margin: 10px 3px;
+	height: 25px;
+}
+
+.navg .mainNavg UL LI A {
+	display: block;
+	height: 25px;
+	padding: 0 25px;
+	line-height: 24px;
+	background-color: #f3ffe3;
+	background: url(/images/tab_left.gif) no-repeat left top;
+	text-decoration: none;
+	float: left;
+	text-align:center;
+	color: #fff;
+	font-weight: bold;	
+}
+
+.navg .mainNavg UL LI A:hover {
+	color: #000000;
+	font-weight: bold;
+}
+
+
+#elsecrosssubject #elsecrosssubjectNavg,
+#elsemysubject #elsemysubjectNavg,
+#mysubject #mysubjectNavg,
+#information #informationNavg,
+#allsubject #allsubjectNavg {
+	float: left;	
+	background-color: #f3ffe3;
+	background: url(/images/tab_right_on.gif) no-repeat right top;
+	margin: 10px 3px;
+	height: 25px;
+}
+
+#elsecrosssubject #elsecrosssubjectNavg A,
+#elsemysubject #elsemysubjectNavg A,
+#mysubject #mysubjectNavg A,
+#information #informationNavg A,
+#allsubject #allsubjectNavg A {
+	display: block;
+	height: 25px;
+	padding: 0 25px;
+	line-height: 24px;
+	background-color: #f3ffe3;
+	background: url(/images/tab_left_on.gif) no-repeat left top;
+	text-decoration: none;
+	float: left;
+	text-align:center;
+	color: #000000;
+	font-weight: bold;	
+}
+
+.navg .secondaryNavg {
+	height: 70px;
+	background: url("/images/bar.gif");
+}
+
+.navg .secondaryNavg UL {
+	position: absolute;
+	left: 0px;
+	margin: 0 5px;
+	padding: 0px;
+	list-style: none;
+	float: left;
+}
+
+.navg .secondaryNavg UL LI {
+	float: left;
+	padding: 0;
+	margin: 5px;
+}
+
+.navg .secondaryNavg UL LI A {
+	display: block;
+	float: left;
+	padding: 2px;
+	margin: 1px;
+	text-decoration: none;
+	color: #000;
+	background: url("/images/new.gif") no-repeat 50% 80%;
+	height: 50px;
+	line-height: 20px;
+}
+
+.navg .secondaryNavg UL LI A:hover {
+	border: 1px #8FBAF4 solid;
+}
+
+#elsecrosssubjectQuery #elsecrosssubjectQueryNavg A,
+#elsecrosssubjectStatistics #elsecrosssubjectStatisticsNavg A,
+#elsecrosssubjectGlobal #elsecrosssubjectGlobalNavg A,
+#leaveApprove #leaveApproveNavg A {
+	display: block;
+	float: left;
+	padding: 2px;
+	margin: 1px;
+	text-decoration: none;
+	color: #000;
+	background: url("/images/new.gif") no-repeat 50% 80%;
+	height: 50px;
+	line-height: 20px;
+	border: 1px solid #3C6EFF
+}
+
+#topicPublish #topicPublishNavg A,
+#topicView #topicViewNavg A,
+#newsView #newsViewNavg A,
+#newsPublish #newsPublishNavg A {
+	display: block;
+	float: left;
+	padding: 2px;
+	margin: 1px;
+	text-decoration: none;
+	color: #000;
+	background: url("/images/new.gif") no-repeat 50% 80%;
+	height: 50px;
+	line-height: 20px;
+	border: 1px solid #3C6EFF
+}
+
+#personInfo #personInfoNavg A {
+	display: block;
+	float: left;
+	padding: 2px;
+	margin: 1px;
+	text-decoration: none;
+	color: #000;
+	background: url("/images/new.gif") no-repeat 50% 80%;
+	height: 50px;
+	line-height: 20px;
+	border: 1px solid #3C6EFF
+}
+
+#homeworkAssign #homeworkAssignNavg A,
+#scoreSubmit #scoreSubmitNavg A,
+#scoreQuery #scoreQueryNavg A {
+	display: block;
+	float: left;
+	padding: 2px;
+	margin: 1px;
+	text-decoration: none;
+	color: #000;
+	background: url("/images/new.gif") no-repeat 50% 80%;
+	height: 50px;
+	line-height: 20px;
+	border: 1px solid #3C6EFF
+}

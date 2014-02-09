@@ -1,0 +1,132 @@
+LOG:  database system was shut down at 2012-12-27 21:55:17 HKT
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+ERROR:  index "tbl_campus_pk" does not exist
+STATEMENT:  /*==============================================================*/
+	/* DBMS name:      PostgreSQL 8                                 */
+	/* Created on:     2012/9/29 7:00:30                            */
+	/*==============================================================*/
+	
+	
+	drop index tbl_campus_PK;
+ERROR:  table "tbl_campus" does not exist
+STATEMENT:  drop table tbl_campus;
+ERROR:  index "tbl_department_pk" does not exist
+STATEMENT:  drop index tbl_department_PK;
+ERROR:  table "tbl_department" does not exist
+STATEMENT:  drop table tbl_department;
+ERROR:  index "tbl_menu_pk" does not exist
+STATEMENT:  drop index tbl_menu_PK;
+ERROR:  table "tbl_menu" does not exist
+STATEMENT:  drop table tbl_menu;
+ERROR:  index "tbl_post_pk" does not exist
+STATEMENT:  drop index tbl_post_PK;
+ERROR:  table "tbl_post" does not exist
+STATEMENT:  drop table tbl_post;
+ERROR:  index "tbl_role_pk" does not exist
+STATEMENT:  drop index tbl_role_PK;
+ERROR:  table "tbl_role" does not exist
+STATEMENT:  drop table tbl_role;
+ERROR:  index "rel_role_menu_menu_fk" does not exist
+STATEMENT:  drop index rel_role_menu_menu_FK;
+ERROR:  index "rel_role_menu_fk" does not exist
+STATEMENT:  drop index rel_role_menu_FK;
+ERROR:  index "tbl_role_menu_pk" does not exist
+STATEMENT:  drop index tbl_role_menu_PK;
+ERROR:  table "tbl_role_menu" does not exist
+STATEMENT:  drop table tbl_role_menu;
+ERROR:  index "tbl_system_pk" does not exist
+STATEMENT:  drop index tbl_system_PK;
+ERROR:  table "tbl_system" does not exist
+STATEMENT:  drop table tbl_system;
+ERROR:  index "rel_post_user_fk" does not exist
+STATEMENT:  drop index rel_post_user_FK;
+ERROR:  index "rel_dep_user_fk" does not exist
+STATEMENT:  drop index rel_dep_user_FK;
+ERROR:  index "rel_campus_user_fk" does not exist
+STATEMENT:  drop index rel_campus_user_FK;
+ERROR:  index "tbl_user_pk" does not exist
+STATEMENT:  drop index tbl_user_PK;
+ERROR:  table "tbl_user" does not exist
+STATEMENT:  drop table tbl_user;
+ERROR:  index "rel_user_role_dtl_fk" does not exist
+STATEMENT:  drop index rel_user_role_dtl_FK;
+ERROR:  index "rel_user_role_fk" does not exist
+STATEMENT:  drop index rel_user_role_FK;
+ERROR:  index "tbl_user_role_pk" does not exist
+STATEMENT:  drop index tbl_user_role_PK;
+ERROR:  table "tbl_user_role" does not exist
+STATEMENT:  drop table tbl_user_role;
+ERROR:  index "rel_sys_userdtl_fk" does not exist
+STATEMENT:  drop index rel_sys_userdtl_FK;
+ERROR:  index "rel_uer_sysdtl_fk" does not exist
+STATEMENT:  drop index rel_uer_sysdtl_FK;
+ERROR:  index "tbl_user_sys_pk" does not exist
+STATEMENT:  drop index tbl_user_sys_PK;
+ERROR:  table "tbl_user_sys" does not exist
+STATEMENT:  drop table tbl_user_sys;
+LOG:  received smart shutdown request
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down
+LOG:  database system was shut down at 2013-01-05 06:56:54 HKT
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+ERROR:  index "tbl_campus_pk" does not exist
+STATEMENT:  /*==============================================================*/
+	/* DBMS name:      PostgreSQL 8                                 */
+	/* Created on:     2013-1-4 10:46:44                            */
+	/*==============================================================*/
+	
+	
+	drop index tbl_campus_pk;
+ERROR:  table "tbl_campus" does not exist
+STATEMENT:  drop table tbl_campus;
+ERROR:  index "tbl_college_pk" does not exist
+STATEMENT:  drop index tbl_college_pk;
+ERROR:  table "tbl_college" does not exist
+STATEMENT:  drop table tbl_college;
+ERROR:  index "tbl_department_pk" does not exist
+STATEMENT:  drop index tbl_department_pk;
+ERROR:  table "tbl_department" does not exist
+STATEMENT:  drop table tbl_department;
+ERROR:  index "tbl_menu_pk" does not exist
+STATEMENT:  drop index tbl_menu_pk;
+ERROR:  table "tbl_menu" does not exist
+STATEMENT:  drop table tbl_menu;
+ERROR:  index "tbl_operator_log_pk" does not exist
+STATEMENT:  drop index tbl_operator_log_pk;
+ERROR:  table "tbl_operator_log" does not exist
+STATEMENT:  drop table tbl_operator_log;
+ERROR:  index "tbl_post_pk" does not exist
+STATEMENT:  drop index tbl_post_pk;
+ERROR:  table "tbl_post" does not exist
+STATEMENT:  drop table tbl_post;
+ERROR:  index "tbl_role_pk" does not exist
+STATEMENT:  drop index tbl_role_pk;
+ERROR:  table "tbl_role" does not exist
+STATEMENT:  drop table tbl_role;
+ERROR:  index "tbl_role_menu_pk" does not exist
+STATEMENT:  drop index tbl_role_menu_pk;
+ERROR:  table "tbl_role_menu" does not exist
+STATEMENT:  drop table tbl_role_menu;
+ERROR:  index "tbl_system_pk" does not exist
+STATEMENT:  drop index tbl_system_pk;
+ERROR:  table "tbl_system" does not exist
+STATEMENT:  drop table tbl_system;
+ERROR:  index "tbl_user_pk" does not exist
+STATEMENT:  drop index tbl_user_pk;
+ERROR:  table "tbl_user" does not exist
+STATEMENT:  drop table tbl_user;
+ERROR:  index "tbl_user_role_pk" does not exist
+STATEMENT:  drop index tbl_user_role_pk;
+ERROR:  table "tbl_user_role" does not exist
+STATEMENT:  drop table tbl_user_role;
+ERROR:  index "tbl_user_sys_pk" does not exist
+STATEMENT:  drop index tbl_user_sys_pk;
+ERROR:  table "tbl_user_sys" does not exist
+STATEMENT:  drop table tbl_user_sys;
+LOG:  received smart shutdown request
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down

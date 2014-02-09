@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd  
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+ 
+	<mvc:resources mapping="/js/*.js" location="/js/"/>  
+    <mvc:resources mapping="/css/*.css" location="/css/"/>  
+    <mvc:resources mapping="/images/*.jpg" location="/images/"/>
+    <mvc:resources mapping="/images/*.JPG" location="/images/"/>
+    <mvc:resources mapping="/images/*.ico" location="/images/"/>
+    <mvc:resources mapping="/images/*.png" location="/images/"/>
+    <mvc:resources mapping="/images/*.gif" location="/images/"/>  
+    <mvc:resources mapping="/themes/**/*.png" location="/themes/"/>
+    <mvc:resources mapping="/themes/**/*.gif" location="/themes/"/>
+    <mvc:resources mapping="/themes/**/*.css" location="/themes/"/>
+    <mvc:default-servlet-handler /> 
+     
+	<context:annotation-config />
+	<!-- 把标记了@Controller注解的类转换为bean -->
+	<context:component-scan base-package="com.sendtend.sso.controller" />
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+		<property name="order" value="0" />
+	</bean>
+	<!-- 
+    <bean id="annotationMapper" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	-->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	<property name="order" value="1"/>
+	</bean> 
+	
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/pages/" p:suffix=".jsp" />
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="utf-8" />
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*.do" />
+			<mvc:mapping path="/**/*.jsp" />
+			<bean class="com.sendtend.sso.filter.LoginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean id="initContext" class="com.sendtend.sso.service.InitContext"
+		abstract="false" scope="singleton"
+		init-method="init">
+	</bean></beans>

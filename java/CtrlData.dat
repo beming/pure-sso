@@ -1,0 +1,3 @@
+openGetPwd:true
+useIdentifyCode:true
+enableMemcached:false

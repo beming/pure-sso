@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="clean" basedir=".">
+    <!--主要的系统环境属性-->
+    <property environment="env"/><!--取window,unix...的环境变量-->
+    <property name="java.home" value="${env.JAVA_HOME}"/>
+    <property name="ant.home"  value="${env.ANT_HOME}"/>
+    <!--主要的app环境属性-->
+    <property name="app.name"      value="sso_framework"/>
+    <property name="normal.jar"       value="${app.name}_normal.jar"/>
+    <property name="app.jar"       value="${app.name}.jar"/>
+    <property name="app.copyright" value=" Copyright (c) 2013 SendTend corp.  All rights reserved."/>
+
+    <!--app中src的属性-->
+    <property name="src.dir"    value="java" />
+    <!--app用到的lib-->
+    <property name="lib.dir" value="WebRoot/WEB-INF/lib"/>
+    <property name="servlet.path" value="D:/apache-tomcat-7.0.42/lib"/>
+    <!--app的build目录中-->
+    <property name="build.dir"      value="build" />
+    <property name="build.classes"  value="${build.dir}/classes"/>
+	<property name="build.lib"  value="${build.dir}/lib"/>
+    <!--app的dist (distribution) 目录中-->
+    <property name="dist.dir"      value="dist"/>
+    <property name="dist.lib"      value="${dist.dir}/lib"/>
+    
+    <property name="proguard.dir" value="proguard"/> 
+    <property name="proguard.lib" value="${proguard.dir}/lib"/>
+    	
+    <path id="classpath">
+        <fileset dir="${java.home}/lib"/>
+        <fileset dir="${servlet.path}">
+        	<include name="*.jar" />
+        </fileset>
+        <fileset dir="${lib.dir}">  
+            <include name="*.jar" />  
+        </fileset>
+    </path>
+<!--
+    ===================================================================
+      init 准备目录(File Tasks)
+      主要的目录结构通常是不会变的，一起生成他们
+    ===================================================================
+-->
+    <target name="init">
+        <!--清除以前目录-->
+    	<delete dir="${build.classes}"/>
+    	<delete dir="${build.lib}"/>
+    	<delete dir="${build.dir}" failonerror="false" />
+    	<delete file="${dist.lib}/*.jar" failonerror="false" />
+        <!--准备目录-->
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes}"/>
+    	<mkdir dir="${build.lib}"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${dist.lib}"/>
+    </target>
+<!--
+    ===================================================================
+      Build the code (Compile Tasks,File Tasks)
+    ===================================================================
+-->
+    <target name="build" depends="init">
+        <!--编译-->
+        <javac srcdir="${src.dir}" destdir="${build.classes}" optimize="true">
+        	<exclude name="**/CampusController.java"/>
+        	<exclude name="**/CollegeController.java"/>
+        	<exclude name="**/DeptController.java"/>
+        	<exclude name="**/TblCampus.java"/>
+        	<exclude name="**/TblCollege.java"/>
+        	<exclude name="**/TblDepartment.java"/>
+        	<exclude name="**/CollegeModel.java"/>
+        	<exclude name="**/DeptModel.java"/>
+        	<exclude name="**/CampusService.java"/>
+        	<exclude name="**/CollegeService.java"/>
+        	<exclude name="**/DeptService.java"/>
+        	<classpath refid="classpath"/>
+        </javac>
+    </target>
+<!--
+    ===================================================================
+      打包文档(Archive Tasks)
+      Create the project jars: xxx1.jar and xxx2.jar
+    ===================================================================
+-->
+   <target name="jars" depends="build">
+        <jar basedir="${build.classes}" jarfile="${build.lib}/${normal.jar}">
+        	<exclude name="**/CampusController.java"/>
+        	<exclude name="**/CollegeController.java"/>
+        	<exclude name="**/DeptController.java"/>
+        	<exclude name="**/TblCampus.java"/>
+        	<exclude name="**/TblCollege.java"/>
+        	<exclude name="**/TblDepartment.java"/>
+        	<exclude name="**/CollegeModel.java"/>
+        	<exclude name="**/DeptModel.java"/>
+        	<exclude name="**/CampusService.java"/>
+        	<exclude name="**/CollegeService.java"/>
+        	<exclude name="**/DeptService.java"/>
+    	</jar>
+    </target>
+    <!-- 
+    ==============================
+    混淆
+    ================================
+     -->
+    <target name="proguard" depends="jars" description="混淆jar文件，并替换">
+		<taskdef resource="proguard/ant/task.properties" classpath="${proguard.lib}/proguard.jar" />
+		<proguard configuration="${proguard.dir}/proguard.pro">
+			<injar file="${build.lib}/${normal.jar}"/>
+			<outjar file="${build.lib}/${app.jar}"/>
+			<libraryjar dir="${lib.dir}"/>
+			<libraryjar dir="${servlet.path}"/>
+		</proguard>
+	</target>
+<!--
+     ===================================================================
+       Create the distribution that can run (Archive Tasks)
+       主要是从各目录中把该copy的copy上
+     ===================================================================
+-->
+   <target name="dist" depends="proguard">
+        <!-- copy lib 文件 -->
+        <copy todir="${dist.lib}">
+            <fileset dir="${build.lib}/"/>
+        </copy>
+    </target>
+<!--
+     ===================================================================
+      Cleans everything(File Tasks)
+      例如可以删除build中的文件，留给你发挥吧
+     ===================================================================
+-->
+	<target name="clean" depends="dist" description="clean build">
+        <!--清除以前目录-->
+		<delete dir="${build.classes}" failonerror="false" />
+		<delete dir="${build.lib}" failonerror="false" />
+        <delete dir="${build.dir}" failonerror="false" />
+	</target>
+</project>

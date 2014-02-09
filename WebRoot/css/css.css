@@ -1,0 +1,36 @@
+HTML {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+BODY {
+  background: #FFF;
+  margin: 0px auto;
+  padding: 0px;
+}
+
+A {
+	outline: none;
+}
+
+#header {
+	height: 30px;
+	background: url("/images/logo.gif");
+	border-bottom: 1px #8FBAF4 solid;
+}
+
+#mainContent {
+	height: 300px;
+}
+
+#footer {
+	height: 25px;
+	background: #C3DBF9;
+	border-top: 1px #F2F7FD solid;
+}
+
+
+FIELDSET {
+	width: 600px;
+	margin: auto;
+}
