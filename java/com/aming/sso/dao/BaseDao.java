@@ -31,5 +31,4 @@ public interface BaseDao {
      * @return
      */
     public List<Map<String, String>> callProcWithReturnList(final String proc, final List<Object> paramList, final int outIdx);
-    public Long callElectiveProcByName(final String proc,final Vector<String> param);
 }

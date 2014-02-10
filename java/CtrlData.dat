@@ -1,3 +1,10 @@
+AsyncCacheClassAndMethod=
+cacheClassAndMethod=
+InterceptorIngorClass=com.sendtend.service.CacheService,com.sendtend.controller.DispatchController
+InterceptorIngorSession=loginUser,loginAdmin
+addSessionFile=TAG1:file1,TAG2:file2
+canUpgrade=false
+clientVer=1.0
 openGetPwd:true
 useIdentifyCode:true
 enableMemcached:false

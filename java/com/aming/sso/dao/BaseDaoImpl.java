@@ -26,29 +26,61 @@ import org.hibernate.type.BinaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  * @author Aming
  * 
  */
+@Transactional
 public class BaseDaoImpl implements BaseDao {
 
-	@Autowired  
+	@Autowired
     @Qualifier("sessionFactory")  
 	private SessionFactory sessionFactory;
+	
+	private Session session = null;
 
+	public void openSession() {
+		this.session = this.sessionFactory.openSession();
+	}
+	
 	public Session getSession() {
+		if(this.session != null) {
+			return this.session;
+		} else if(this.sessionFactory != null ) {
+			this.session = this.sessionFactory.getCurrentSession();
+			try {
+				this.session.createQuery("select 1").list();
+				return this.session;
+			} catch (Exception ex) {
+				//this.session = this.sessionFactory.openSession();
+				ex.printStackTrace();
+			}
+			this.session = this.sessionFactory.openSession();
+			return this.session;
+		}
 		return this.sessionFactory.getCurrentSession();
 	}
-
+	
+	public void closeSession() {
+		if(this.session != null) {
+			this.session.clear();
+			this.session.close();
+			this.session = null;
+		}
+	}
+	
 	public SessionFactory getSessionFactory() {
 		return this.sessionFactory;
 	}
 
+	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+
 
 	public Criteria createCriteria(Class<?> clazz) {
 		return getSession().createCriteria(clazz);
@@ -82,6 +114,21 @@ public class BaseDaoImpl implements BaseDao {
 		return rows;
 	}
 
+	public List<?> queryByExample(Object obj, boolean asc, String... orderField) {
+		Criteria criteria = getSession().createCriteria(obj.getClass())
+			     .add( Example.create(obj).enableLike().ignoreCase());
+		if(orderField != null && orderField.length > 0) {
+			for(String order : orderField) {
+				if(asc) {
+					criteria.addOrder(Order.asc(order));
+				} else {
+					criteria.addOrder(Order.desc(order));
+				}
+			}
+		}
+		return criteria.list();
+	}
+	
 	public Object save(final Object model) {
 		getSession().save(model);
 		return model;
@@ -95,16 +142,14 @@ public class BaseDaoImpl implements BaseDao {
 		getSession().delete(model);
 	}
 	
-	public List<?> queryByExample(Object obj, boolean asc, String... orderField) {
+	public List<?> queryByExample(Object obj, String orderField, boolean asc) {
 		Criteria criteria = getSession().createCriteria(obj.getClass())
 			     .add( Example.create(obj).enableLike().ignoreCase());
-		if(orderField != null && orderField.length > 0) {
-			for(String order : orderField) {
-				if(asc) {
-					criteria.addOrder(Order.asc(order));
-				} else {
-					criteria.addOrder(Order.desc(order));
-				}
+		if(orderField != null && !orderField.isEmpty()) {
+			if(asc) {
+				criteria.addOrder(Order.asc(orderField));
+			} else {
+				criteria.addOrder(Order.desc(orderField));
 			}
 		}
 		return criteria.list();
@@ -161,11 +206,6 @@ public class BaseDaoImpl implements BaseDao {
 		query.setMaxResults(pageSize);
 		query.setFirstResult((thePage - 1) * pageSize);
 		List<?> rows = (List<?>) query.list();
-		if (rows.size() > 0) {
-			if (rows.get(0) instanceof List || rows.get(0) instanceof ArrayList) {
-				return (List<?>) rows.get(0);
-			}
-		}
 		return rows;
 	}
 
@@ -181,11 +221,6 @@ public class BaseDaoImpl implements BaseDao {
 		query.setMaxResults(pageSize);
 		query.setFirstResult((thePage - 1) * pageSize);
 		List<?> rows = (List<?>) query.list();
-		if (rows.size() > 0) {
-			if (rows.get(0) instanceof List || rows.get(0) instanceof ArrayList) {
-				return (List<?>) rows.get(0);
-			}
-		}
 		return rows;
 	}
 
@@ -463,61 +498,5 @@ public class BaseDaoImpl implements BaseDao {
 			}
 		}
 		return result;
-	}
-
-	public Long callElectiveProcByName(final String proc, final Vector<String> param) {
-		// List result = new ArrayList();
-		Connection conn = null;
-		CallableStatement cstmt = null;
-		try {
-			// conn = getSession().connection();
-			conn = SessionFactoryUtils.getDataSource(getSessionFactory()).getConnection();
-			conn.setAutoCommit(false);
-
-			cstmt = conn.prepareCall("{Call " + proc + "(?,?,?,?,?,?,?)}");
-			/*
-			 * objCommand.Parameters.Add("xzkh", OracleType.VarChar, 40).Value =
-			 * this.xzkh; objCommand.Parameters.Add("xsxh", OracleType.VarChar,
-			 * 20).Value = this.xh_str; objCommand.Parameters.Add("xncs",
-			 * OracleType.VarChar, 10).Value = this.xn_str;
-			 * objCommand.Parameters.Add("xqcs", OracleType.VarChar, 1).Value =
-			 * this.xq_str; objCommand.Parameters.Add("xkcs",
-			 * OracleType.VarChar, 50).Value = this.xkkh_str;
-			 * objCommand.Parameters.Add("jcyd", OracleType.VarChar, 1).Value =
-			 * this.RadioButtonList1.SelectedItem.Value;
-			 * objCommand.Parameters.Add("fhbz", OracleType.Int32, 1).Direction
-			 * = ParameterDirection.Output;
-			 */
-			for (int i = 1; i < 7; i++) {
-				cstmt.setString(i, param.get(i - 1));
-			}
-			cstmt.setDouble(7, 0);
-			cstmt.registerOutParameter(7, java.sql.Types.BIGINT);
-			cstmt.execute();
-			Long rst = cstmt.getLong(7);
-			conn.commit();
-			return rst;
-		} catch (Exception ex) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			ex.printStackTrace();
-		} finally {
-			if (cstmt != null) {
-				try {
-					cstmt.close();
-				} catch (Exception ex) {
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception ex) {
-				}
-			}
-		}
-		return new Long(-1);
 	}
 }
