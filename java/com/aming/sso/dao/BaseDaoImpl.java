@@ -155,6 +155,7 @@ public class BaseDaoImpl implements BaseDao {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map<?, ?>> queryNativeSQL(final String sql, final Object bean, final int thePage, final int pageSize) {
 		Query query = getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		;
@@ -174,6 +175,7 @@ public class BaseDaoImpl implements BaseDao {
 		}
 		query.setMaxResults(pageSize);
 		query.setFirstResult((thePage - 1) * pageSize);
+		@SuppressWarnings("unchecked")
 		List<Map<?, ?>> rows = query.list();
 		return rows;
 	}
@@ -194,6 +196,7 @@ public class BaseDaoImpl implements BaseDao {
 		}
 		query.setMaxResults(pageSize);
 		query.setFirstResult((thePage - 1) * pageSize);
+		@SuppressWarnings("unchecked")
 		List<Map<?, ?>> rows = query.list();
 		return rows;
 	}
@@ -423,6 +426,7 @@ public class BaseDaoImpl implements BaseDao {
 		final DetachedCriteria query = DetachedCriteria.forClass(clazz);
 		Criteria criteria = query.getExecutableCriteria(getSession());
 		criteria.add(Restrictions.eq(idName, idValue));
+		@SuppressWarnings("unchecked")
 		List<T> list = criteria.list();
 		if (list != null && list.size() > 0) {
 			return list.get(0);
@@ -434,6 +438,7 @@ public class BaseDaoImpl implements BaseDao {
 		final DetachedCriteria query = DetachedCriteria.forClass(clazz);
 		Criteria criteria = query.getExecutableCriteria(getSession());
 		criteria.add(Restrictions.eq(prop, value));
+		@SuppressWarnings("unchecked")
 		List<T> list = criteria.list();
 		if (list != null && list.size() > 0) {
 			return list.get(0);

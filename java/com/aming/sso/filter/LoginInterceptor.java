@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSON;
 import com.aming.sso.ContextDefine;
 import com.aming.sso.ControlDefine;
 import com.aming.sso.controller.FramesetController;
-import com.aming.sso.controller.LoginController;
 import com.aming.sso.entity.TblMenu;
 import com.aming.sso.entity.TblRoleMenu;
 import com.aming.sso.model.DwzCallBackModel;
@@ -64,10 +63,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		String forwardUrl = prop.getProperty(ControlDefine.INTERCEPTOR_FORWARDURL);
-		if(forwardUrl != null && forwardUrl.length()>3) {
-			response.sendRedirect(forwardUrl);
-			return false;
-		}
+		//if(forwardUrl != null && forwardUrl.length()>3) {
+			//response.sendRedirect(forwardUrl);
+			//return false;
+		//}
 		//end of st framework's feature
 		if(request.getSession() != null && request.getSession().getAttribute(ContextDefine.LOGIN_ADMIN) != null) {
 			PurviewModel pm = (PurviewModel) request.getSession().getAttribute(ContextDefine.LOGIN_USER_RIGHT);
@@ -134,7 +133,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 					return true;
 				}
 			} else if(handler instanceof DefaultServletHttpRequestHandler) {
-				response.sendRedirect("/login.do");
+				response.sendRedirect(forwardUrl);
 				return false;
 			}
 			//response.sendRedirect("/login.do?method=logout");
