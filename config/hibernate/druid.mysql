@@ -1,8 +1,8 @@
 druid.alias=spring-druid
 druid.driver-class=com.mysql.jdbc.Driver
-druid.driver-url=jdbc\:mysql\://localhost\:3306/whdb
+druid.driver-url=jdbc\:mysql\://127.0.0.1\:3306/whdb
 druid.user=whdb
-druid.password=Biyu5YzU+6sxDRbmWEa3B2uUcImzDo0BuXjTlL505+/pTb+/0Oqd3ou1R6J8+9Fy3CYrM18nBDqf6wAaPgUGOg==
+druid.password=Cyyp/JOwQiEg68TJoa5a1wwS+ppsPJ2+kkOX1Vyx/8whzBJif1KAxRuxv9U9i32RWIuqeVmgGiEUor2B+jNvXA==
 druid.minEvictableIdleTimeMillis=300000
 druid.maxWait=60000
 druid.timeBetweenEvictionRunsMillis=60000
