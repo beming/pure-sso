@@ -38,9 +38,9 @@
 		</p>
 		<p>
 			<label>部门：</label>
-			<form:hidden path="depId" id=""/>
-			<input class="required" name="depName" type="text" value="${dep_name }" postField="keyword" suggestFields="depName" suggestUrl="/dept.do?tag=listDepts" warn="请选择学院" lookupGroup=""/>
-			<a class="btnLook" href="/dept.do?tag=toQuery" warn="请选择学院" lookupGroup="">查找带回</a>
+			<form:hidden path="depId" id="input"/>
+			<input name="depName" type="text" value="${dep_name }" postField="keyword" suggestFields="depName" suggestUrl="/dept.do?tag=listDepts" lookupGroup=""/>
+			<a class="btnLook" href="/dept.do?tag=toQuery" lookupGroup="">查找带回</a>
 		</p>
 		<p>
 			<label>岗位：</label>

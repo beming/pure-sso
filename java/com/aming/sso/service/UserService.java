@@ -91,6 +91,8 @@ public class UserService {
 					if(user.getPasswd() == null) {
 						user.setPasswd(existingUser.getPasswd());
 					}
+					log.debug("-------- test user model: existingUser:" + existingUser.toString());
+					log.debug("-------- test user model: user" + user.toString());
 					BeanTool.copyProperties(existingUser, user);
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
@@ -114,12 +116,12 @@ public class UserService {
 	 * @return
 	 */
 	public List<?> findUserByExample(TblUser user) {
-		String sql = "from TblUser where loginName=? and passwd=?";
-		Vector<String> v = new Vector<String>();
-		v.add(user.getLoginName());
-		v.add(user.getPasswd());
-		return entityDao.createQuery(sql, v, 1, -1);
-		//return entityDao.queryByExample(user, true, "userName");
+		//String sql = "from TblUser where loginName=? and passwd=?";
+		//Vector<String> v = new Vector<String>();
+		//v.add(user.getLoginName());
+		//v.add(user.getPasswd());
+		//return entityDao.createQuery(sql, v, 1, -1);
+		return entityDao.queryByExample(user, true, "userName");
 	}
 	
 	/**
@@ -132,9 +134,10 @@ public class UserService {
 	 */
 	public PageUtil listUsers(TblUser user, String nativeOrderField, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
-		StringBuffer sql = new StringBuffer("select tu.*,tp.post_name");
+		StringBuffer sql = new StringBuffer("select tu.*,tp.post_name,td.dep_name");
 		sql.append(" from tbl_user tu ");
-		sql.append(" left join tbl_post tp on tu.post_id=tp.post_id where tu.user_id<>1 ");
+		sql.append(" left join tbl_post tp on tu.post_id=tp.post_id");
+		sql.append(" left join tbl_department td on tu.dep_id=td.dep_id where tu.user_id<>1 ");
 		if(user != null) {
 			if(user.getLoginName() != null) {
 				user.setLoginName("%" + user.getLoginName() + "%");

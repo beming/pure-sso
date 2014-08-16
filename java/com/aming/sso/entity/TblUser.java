@@ -32,6 +32,14 @@ public class TblUser implements java.io.Serializable {
 	private Date chgPwdDate;
 	private Integer status;
 	private Boolean idType;
+	@Override
+	public String toString() {
+		return "TblUser [userId=" + userId + ", depId=" + depId + ", postId=" + postId + ", loginName=" + loginName + ", userName=" + userName + ", passwd="
+				+ passwd + ", chgPwdDate=" + chgPwdDate + ", status=" + status + ", idType=" + idType + ", idNum=" + idNum + ", sexy=" + sexy + ", birthday="
+				+ birthday + ", phone=" + phone + ", mobile=" + mobile + ", addr=" + addr + ", postCode=" + postCode + ", email=" + email + ", lastLoginTime="
+				+ lastLoginTime + ", remark=" + remark + "]";
+	}
+
 	private String idNum;
 	private Integer sexy;
 	private Date birthday;
