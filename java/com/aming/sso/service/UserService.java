@@ -3,6 +3,7 @@ package com.aming.sso.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +28,7 @@ public class UserService {
 	protected final transient Log log = LogFactory.getLog(UserService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 	@Autowired
 	private RoleService roleService;
 	//@Autowired
@@ -35,42 +36,39 @@ public class UserService {
 
 	/**
 	 */
-	@Transactional
 	public TblUser findUserById(Integer userId) {
 		if(userId == null) {
 			return null;
 		}
-		return dao.findEntityById("userId", userId, TblUser.class);
+		return entityDao.findEntityById("userId", userId, TblUser.class);
 	}
 
 	/**
 	 * 
 	 * @param User
 	 */
-	@Transactional
 	public int updateUserPwd(TblUser user) {
 		if(user == null || user.getUserId() == null) {
 			return 0;
 		}
 		String sql = "update Tbl_User set passwd=:passwd where user_Id=:userId";
-		return dao.executeSQL(sql, user);
+		return entityDao.executeSQL(sql, user);
 	}
 	
 	/**
 	 * Delete an existing User entity
 	 * @param User
 	 */
-	@Transactional
 	public int deleteUser(TblUser user) {
 		if(user == null || user.getUserId() == null) {
 			return 0;
 		}
 		String sql = "delete from tbl_user_role where user_id<>1 and user_id=:userId";
-		//dao.executeSQL(sql, user);
+		//entityDao.executeSQL(sql, user);
 		//sql = "delete from tbl_user_sys where user_id<>1 and user_id=:userId";
-		dao.executeSQL(sql, user);
+		entityDao.executeSQL(sql, user);
 		sql = "update Tbl_User set status=0 where user_id<>1 and user_Id=:userId";
-		return dao.executeSQL(sql, user);
+		return entityDao.executeSQL(sql, user);
 	}
 
 
@@ -78,7 +76,6 @@ public class UserService {
 	 * Save an existing User entity
 	 * @param User
 	 */
-	@Transactional
 	public TblUser saveUser(TblUser user) {
 		if(user == null) {
 			return null;
@@ -101,12 +98,12 @@ public class UserService {
 					e.printStackTrace();
 				}
 			}
-			dao.update(existingUser);
+			entityDao.update(existingUser);
 			return existingUser;
 		} else {
 			//加密用户密码：
 			user.setPasswd(new MD5().getMD5ofStr(user.getPasswd()));
-			user = (TblUser)dao.save(user);
+			user = (TblUser)entityDao.save(user);
 			return user;
 		}
 	}
@@ -116,9 +113,13 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	@Transactional
 	public List<?> findUserByExample(TblUser user) {
-		return dao.queryByExample(user, true, "userName");
+		String sql = "from TblUser where loginName=? and passwd=?";
+		Vector<String> v = new Vector<String>();
+		v.add(user.getLoginName());
+		v.add(user.getPasswd());
+		return entityDao.createQuery(sql, v, 1, -1);
+		//return entityDao.queryByExample(user, true, "userName");
 	}
 	
 	/**
@@ -129,7 +130,6 @@ public class UserService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listUsers(TblUser user, String nativeOrderField, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
 		StringBuffer sql = new StringBuffer("select tu.*,tp.post_name");
@@ -155,9 +155,9 @@ public class UserService {
 		if(log.isDebugEnabled()) {
 			log.debug("-------------list user sql: " + sql.toString());
 		}
-		List<?> list = dao.queryNativeSQLAsBean(sql.toString(), user, UserModel.class, thePage, pageSize);
+		List<?> list = entityDao.queryNativeSQLAsBean(sql.toString(), user, UserModel.class, thePage, pageSize);
 		pu.setDataSet(list);
-		int count = new Integer(dao.createQuery("select count(o) from TblUser o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblUser o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}
@@ -172,7 +172,6 @@ public class UserService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public Map<String, Object> findUsersOtherProperties(TblUser user) {
 		StringBuffer sql = new StringBuffer("select tp.post_id,tp.post_name");
 		sql.append(" from tbl_user tu ");
@@ -188,7 +187,7 @@ public class UserService {
 		if(log.isDebugEnabled()) {
 			log.debug("-------------list user sql: " + sql.toString());
 		}
-		List<?> list = dao.queryNativeSQL(sql.toString(), user, 1, -1);
+		List<?> list = entityDao.queryNativeSQL(sql.toString(), user, 1, -1);
 		if(log.isDebugEnabled()) {
 			log.debug("----------------find user other properties:" + list);
 		}
@@ -204,7 +203,6 @@ public class UserService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<TblMenu> listUserMenu(TblUser user, Boolean isMenu) {
 		if(user == null) {
 			return null;
@@ -220,7 +218,7 @@ public class UserService {
 			}
 		}
 		sql.append(" order by tm.menuSort");
-		List<?> list = dao.createQuery(sql.toString(), user, 1, -1);
+		List<?> list = entityDao.createQuery(sql.toString(), user, 1, -1);
 		return (List<TblMenu>) list;
 	}
 	
@@ -229,7 +227,6 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	@Transactional
 	public PurviewModel listUserRight(TblUser user) {
 		if(user == null) {
 			return null;
@@ -264,6 +261,6 @@ public class UserService {
 		if(log.isDebugEnabled()) {
 			 log.debug("-------- update user sid:" + sql);
 		}
-		return dao.executeSQL(sql, user);
+		return entityDao.executeSQL(sql, user);
 	}
 }

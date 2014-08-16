@@ -20,34 +20,31 @@ public class PostService {
 	protected final transient Log log = LogFactory.getLog(PostService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 
 	/**
 	 */
-	@Transactional
 	public TblPost findPostById(Integer postId) {
 		if(postId == null) {
 			return null;
 		}
-		return dao.findEntityById("postId", postId, TblPost.class);
+		return entityDao.findEntityById("postId", postId, TblPost.class);
 	}
 	
-	@Transactional
 	public List<?> findPostByExample(TblPost post) {
-		return dao.queryByExample(post, true, "postName");
+		return entityDao.queryByExample(post, true, "postName");
 	}
 
 	/**
 	 * Delete an existing User entity
 	 * @param User
 	 */
-	@Transactional
 	public int delPost(TblPost post) {
 		if(post == null || post.getPostId() == null) {
 			return 0;
 		}
 		String sql = "update tbl_post set post_status=0 where post_id=:postId";
-		return dao.executeSQL(sql, post);
+		return entityDao.executeSQL(sql, post);
 	}
 
 
@@ -55,7 +52,6 @@ public class PostService {
 	 * Save an existing User entity
 	 * @param User
 	 */
-	@Transactional
 	public TblPost savePost(TblPost post) {
 		if(post == null) {
 			return null;
@@ -72,23 +68,22 @@ public class PostService {
 					e.printStackTrace();
 				}
 			}
-			dao.update(existingUser);
+			entityDao.update(existingUser);
 			return existingUser;
 		} else {
-			post = (TblPost)dao.save(post);
+			post = (TblPost)entityDao.save(post);
 			return post;
 		}
 	}
 	
-	@Transactional
 	public PageUtil listPost(TblPost post, String orderField, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
 		if(orderField == null || orderField.isEmpty()) {
 			orderField = "postName";
 		}
-		List<?> list = dao.queryByExample(post, true, orderField);
+		List<?> list = entityDao.queryByExample(post, true, orderField);
 		pu.setDataSet(list);
-		int count = new Integer(dao.createQuery("select count(o) from TblPost o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblPost o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}

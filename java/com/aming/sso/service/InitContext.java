@@ -26,29 +26,27 @@ import com.aming.sso.model.GlobalModel;
 import com.sendtend.util.PropertiesParse;
 
 @Service
-@Component
 @Transactional
 public class InitContext implements ServletContextAware {
 	protected final transient Log log = LogFactory.getLog(InitContext.class);
 	
 	@Autowired
 	@Qualifier("entityDao") 
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 	private ServletContext context;
 	
 	private byte[] lock = new byte[0]; // 特殊的instance变量
 	
 	public BaseDaoImpl getDao() {
-		return dao;
+		return entityDao;
 	}
 
-	public void setDao(BaseDaoImpl dao) {
-		this.dao = dao;
+	public void setDao(BaseDaoImpl entityDao) {
+		this.entityDao = entityDao;
 	}
 
 	//@PostConstruct
 	@Required
-	@Transactional
 	public void init() {
 		synchronized(lock){
 			
@@ -97,21 +95,21 @@ public class InitContext implements ServletContextAware {
 				}
 			}
 			if(log.isInfoEnabled()) {
-				log.info("-------test dao:");
+				log.info("-------test entityDao:");
 			}
 			String sql = "select 1";
-			dao.openSession();
-			dao.queryNativeSQL(sql, null, 1, -1);
+			entityDao.openSession();
+			entityDao.queryNativeSQL(sql, null, 1, -1);
 			if(log.isInfoEnabled()) {
-				log.info("-------end of test dao:");
+				log.info("-------end of test entityDao:");
 			}
 			//调用缓存方法！
 			CacheService cs = new CacheService();
-			cs.initCache(this.context, dao);
+			cs.initCache(this.context, entityDao);
 			//调用异步执行缓存方法！
 			AsyncCacheService as = new AsyncCacheService();
-			as.initCache(this.context, dao);
-			dao.closeSession();
+			as.initCache(this.context, entityDao);
+			entityDao.closeSession();
 		}
 	}
 	

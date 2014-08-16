@@ -20,16 +20,15 @@ public class MenuService {
 	protected final transient Log log = LogFactory.getLog(MenuService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 
 	/**
 	 */
-	@Transactional
 	public TblMenu findMenuById(Integer menuId) {
 		if(menuId == null) {
 			return null;
 		}
-		return dao.findEntityById("menuId", menuId, TblMenu.class);
+		return entityDao.findEntityById("menuId", menuId, TblMenu.class);
 	}
 	
 	/**
@@ -37,26 +36,24 @@ public class MenuService {
 	 * @param menu
 	 * @return
 	 */
-	@Transactional
 	public List<?> findMenuByExample(TblMenu menu) {
-		return dao.queryByExample(menu, true, "menuName");
+		return entityDao.queryByExample(menu, true, "menuName");
 	}
 
 	/**
 	 * Delete an existing menut entity
 	 * @param menut
 	 */
-	@Transactional
 	public int deleteMenu(TblMenu menu) {
 		if(menu == null || menu.getMenuId() == null) {
 			return 0;
 		}
 		String sql = "delete from tbl_role_menu where menu_id=:menuId";
-		int rst = dao.executeSQL(sql, menu);
+		int rst = entityDao.executeSQL(sql, menu);
 		sql = "delete from tbl_menu where parent_id=:menuId";
-		dao.executeSQL(sql, menu);
+		entityDao.executeSQL(sql, menu);
 		sql = "delete from tbl_menu where menu_id=:menuId";
-		rst = dao.executeSQL(sql, menu);
+		rst = entityDao.executeSQL(sql, menu);
 		return rst;
 	}
 
@@ -65,7 +62,6 @@ public class MenuService {
 	 * Save an existing menu entity
 	 * @param menut
 	 */
-	@Transactional
 	public TblMenu saveMenu(TblMenu menu) {
 		if(menu == null) {
 			return null;
@@ -82,10 +78,10 @@ public class MenuService {
 					e.printStackTrace();
 				}
 			}
-			dao.update(existingMenu);
+			entityDao.update(existingMenu);
 			return existingMenu;
 		} else {
-			menu = (TblMenu)dao.save(menu);
+			menu = (TblMenu)entityDao.save(menu);
 			return menu;
 		}
 	}
@@ -99,17 +95,16 @@ public class MenuService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listMenus(TblMenu menu, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
 		String sql = "select new Map(tm as TblMenu,(select menuName from TblMenu where menuId=tm.parentId) as parentMenuName) " +
 				"from TblMenu tm where tm.isMenu=1 and tm.menuStatus=1 order by tm.parentId,tm.menuLevel,tm.menuSort";
-		List<?> list = dao.createQuery(sql, 1, -1);
+		List<?> list = entityDao.createQuery(sql, 1, -1);
 		if(log.isDebugEnabled()) {
 			log.debug("------list:" + list);
 		}
 		pu.setDataSet((List<?>) list);
-		int count = new Integer(dao.createQuery("select count(o) from TblMenu o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblMenu o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}
@@ -121,10 +116,9 @@ public class MenuService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listTreeMenus(TblMenu menu, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
-		List<?> list = dao.queryByExample(menu, true, "parentId", "menuLevel", "menuSort");
+		List<?> list = entityDao.queryByExample(menu, true, "parentId", "menuLevel", "menuSort");
 		pu.setDataSet(list);
 		return pu;
 	}

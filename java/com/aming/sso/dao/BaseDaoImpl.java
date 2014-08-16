@@ -26,14 +26,14 @@ import org.hibernate.type.BinaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
 /**
  * 
  * @author Aming
  * 
  */
-@Transactional
+@Repository
 public class BaseDaoImpl implements BaseDao {
 
 	@Autowired

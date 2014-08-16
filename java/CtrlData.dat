@@ -1,8 +1,8 @@
 AsyncCacheClassAndMethod=
 cacheClassAndMethod=
-InterceptorIngorClass=com.sendtend.service.CacheService,com.sendtend.controller.DispatchController
+InterceptorIngorClass=com.aming.sso.cache.CacheService,com.aming.sso.controller.LoginController
 InterceptorIngorSession=loginUser,loginAdmin
-InterceptorIngorSession=/adminLogin.do
+InterceptorIngorSession=/login.do
 addSessionFile=TAG1:file1,TAG2:file2
 canUpgrade=false
 clientVer=1.0

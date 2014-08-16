@@ -10,7 +10,7 @@
    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.aming">
+	<context:component-scan base-package="com.aming.sso">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 	<task:annotation-driven />
@@ -34,7 +34,9 @@
 		<property name="poolPreparedStatements" value="true" />
 		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
 		<property name="filters" value="stat" />
+		<!-- 
 		<property name="connectionProperties" value="config.decrypt=true" />
+		 -->
 	</bean>
 	
 	<bean id="sessionFactory"
@@ -42,7 +44,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan">
 			<list>
-				<!--	<value>com.aming.sso.entity</value> -->
+				<value>com.aming.sso.entity</value>
 			</list>
 		</property>
 	</bean>
@@ -75,13 +77,20 @@
             <tx:method name="elective*" propagation="REQUIRED"/>
             <tx:method name="cancel*" propagation="REQUIRED"/>
             <tx:method name="jcyd" propagation="REQUIRED"/>
-            <tx:method name="*"/>
+            <tx:method name="*" read-only="true"/>
         </tx:attributes>
     </tx:advice>
+    <!-- 
     <aop:config proxy-target-class="true"/>
+     -->
     <aop:config expose-proxy="true">
+    	<!-- 
         <aop:pointcut id="interceptorPointCuts" expression="execution(* com.aming.sso.dao.*BaseDaoImpl.*(..))" />
+         -->
+         <aop:pointcut id="interceptorPointCuts" expression="execution(* com.aming.sso.service..*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" /> 
     </aop:config>
+    <!-- 
 	<aop:aspectj-autoproxy />
+	 -->
 </beans>

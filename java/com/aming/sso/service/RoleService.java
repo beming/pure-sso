@@ -23,31 +23,29 @@ public class RoleService {
 	protected final transient Log log = LogFactory.getLog(RoleService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 
 	/**
 	 */
-	@Transactional
 	public TblRole findRoleById(Integer roleId) {
 		if(roleId == null) {
 			return null;
 		}
-		return dao.findEntityById("roleId", roleId, TblRole.class);
+		return entityDao.findEntityById("roleId", roleId, TblRole.class);
 	}
 
 	/**
 	 * Delete an existing Role entity
 	 * @param Role
 	 */
-	@Transactional
 	public int deleteRole(TblRole role) {
 		if(role == null || role.getRoleId() == null) {
 			return 0;
 		}
 		String sql = "delete from Tbl_Role where role_id<>1 and role_Id=:roleId";
-		int rst = dao.executeSQL(sql, role);
+		int rst = entityDao.executeSQL(sql, role);
 		sql = "delete from tbl_role_menu where role_id<>1 and role_id=:roleId";
-		rst = dao.executeSQL(sql, role);
+		rst = entityDao.executeSQL(sql, role);
 		return rst;
 	}
 
@@ -55,7 +53,6 @@ public class RoleService {
 	 * Save an existing Role entity
 	 * @param Role
 	 */
-	@Transactional
 	public TblRole saveRole(TblRole role) {
 		if(role == null) {
 			return null;
@@ -72,10 +69,10 @@ public class RoleService {
 					e.printStackTrace();
 				}
 			}
-			dao.update(existingRole);
+			entityDao.update(existingRole);
 			return existingRole;
 		} else {
-			role = (TblRole)dao.save(role);
+			role = (TblRole)entityDao.save(role);
 			return role;
 		}
 	}
@@ -86,9 +83,8 @@ public class RoleService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<TblRole> findRoleByExample(TblRole role) {
-		return (List<TblRole>) dao.queryByExample(role, true, "roleId");
+		return (List<TblRole>) entityDao.queryByExample(role, true, "roleId");
 	}
 	
 	/**
@@ -98,12 +94,11 @@ public class RoleService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listRoles(TblRole role, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
-		List<?> list = dao.queryByExample(role, true, "roleId");
+		List<?> list = entityDao.queryByExample(role, true, "roleId");
 		pu.setDataSet(list);
-		int count = new Integer(dao.createQuery("select count(o) from TblRole o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblRole o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}
@@ -114,14 +109,13 @@ public class RoleService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<TblRole> listUserRole(TblUser user) {
 		if(user == null) {
 			return null;
 		}
 		String sql = "select tr from TblRole tr, TblUserRole tur, TblUser tu " +
 				"where tr.roleId=tur.roleId and tur.userId=tu.userId and tu.userId=:userId";
-		List<?> list = dao.createQuery(sql, user, 1, -1);
+		List<?> list = entityDao.createQuery(sql, user, 1, -1);
 		return (List<TblRole>) list;
 	}
 	
@@ -130,12 +124,11 @@ public class RoleService {
 	 * @param ur
 	 * @return
 	 */
-	@Transactional
 	public TblUserRole saveUserRole(TblUserRole ur) {
 		if(ur == null) {
 			return null;
 		}
-		return (TblUserRole) dao.save(ur);
+		return (TblUserRole) entityDao.save(ur);
 	}
 	
 	/**
@@ -143,13 +136,12 @@ public class RoleService {
 	 * @param role
 	 * @return
 	 */
-	@Transactional
 	public int deleteUserRole(TblUser user) {
 		if(user == null || user.getUserId() == null) {
 			return -1;
 		}
 		String sql = "delete from Tbl_user_Role where user_id<>1 and user_id=:userId";
-		return dao.executeSQL(sql, user);
+		return entityDao.executeSQL(sql, user);
 	}
 	
 	/**
@@ -158,7 +150,6 @@ public class RoleService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<TblRoleMenu> listUserRoleMenu(TblUser user) {
 		if(user == null) {
 			return null;
@@ -168,7 +159,7 @@ public class RoleService {
 		if(log.isDebugEnabled()) {
 			log.debug("--------- listUserRoleMenu:" + sql);
 		}
-		List<?> list = dao.createQuery(sql, user, 1, -1);
+		List<?> list = entityDao.createQuery(sql, user, 1, -1);
 		return (List<TblRoleMenu>) list;
 	}
 	
@@ -178,13 +169,12 @@ public class RoleService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<TblRoleMenu> listRoleMenuByRoleId(TblRole role) {
 		if(role == null) {
 			return null;
 		}
 		String sql = "select trm from TblRoleMenu trm where trm.roleId=:roleId";
-		List<?> list = dao.createQuery(sql, role, 1, -1);
+		List<?> list = entityDao.createQuery(sql, role, 1, -1);
 		return (List<TblRoleMenu>) list;
 	}
 	
@@ -193,13 +183,12 @@ public class RoleService {
 	 * @param role
 	 * @return
 	 */
-	@Transactional
 	public int delRoleMenu(TblRole role) {
 		if(role == null || role.getRoleId() == null) {
 			return -1;
 		}
 		String sql = "delete from tbl_role_menu where role_id=:roleId";
-		return dao.executeSQL(sql, role);
+		return entityDao.executeSQL(sql, role);
 	}
 	
 	/**
@@ -207,12 +196,11 @@ public class RoleService {
 	 * @param user
 	 * @return
 	 */
-	@Transactional
 	public TblRoleMenu saveRoleMenu(TblRoleMenu rm) {
 		if(rm == null) {
 			return null;
 		}
 		log.info("-------------RoleMenu id:" + rm.getRoleMenuId());
-		return (TblRoleMenu) dao.save(rm);
+		return (TblRoleMenu) entityDao.save(rm);
 	}
 }

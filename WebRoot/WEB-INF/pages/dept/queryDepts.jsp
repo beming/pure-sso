@@ -10,13 +10,13 @@
 </form>
 
 <div class="pageHeader">
-	<form rel="pagerForm" method="post" action="/post.do?tag=toQuery" onsubmit="return dwzSearch(this, 'dialog');">
+	<form rel="pagerForm" method="post" action="/dept.do?tag=toQuery" onsubmit="return dwzSearch(this, 'dialog');">
 	<input type="hidden" name="rel" value="${rel}"/>
 	<div class="searchBar">
 		<ul class="searchContent">
 			<li>
-				<label>岗位名称:</label>
-				<input class="textInput" name="postName" value="" type="text">
+				<label>部门名称:</label>
+				<input class="textInput" name="depName" value="" type="text">
 			</li>
 		</ul>
 		<div class="subBar">
@@ -31,16 +31,16 @@
 	<table class="table" layoutH="118" targetType="dialog" width="100%">
 		<thead>
 			<tr>
-				<th orderfield="postName">岗位名称</th>
+				<th orderfield="depName">部门名称</th>
 				<th width="80">查找带回</th>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${PageUtil.dataSet}" var="post">
 			<tr>
-				<td>${post.postName}</td>
+				<td>${post.depName}</td>
 				<td>
-					<a class="btnSelect" href="javascript:$.bringBack({postId:'${post.postId}', postName:'${post.postName}'})" title="查找带回">选择</a>
+					<a class="btnSelect" href="javascript:$.bringBack({depId:'${post.depId}', depName:'${post.depName}'})" title="查找带回">选择</a>
 				</td>
 			</tr>
 		</c:forEach>

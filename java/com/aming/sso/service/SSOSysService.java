@@ -26,16 +26,15 @@ public class SSOSysService {
 	protected final transient Log log = LogFactory.getLog(SSOSysService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 
 	/**
 	 */
-	@Transactional
 	public TblSystem findSysById(Integer sysId) {
 		if(sysId == null) {
 			return null;
 		}
-		return dao.findEntityById("sysId", sysId, TblSystem.class);
+		return entityDao.findEntityById("sysId", sysId, TblSystem.class);
 	}
 	
 	/**
@@ -43,12 +42,11 @@ public class SSOSysService {
 	 * @param userSysId
 	 * @return
 	 */
-	@Transactional
 	public TblUserSys findUserSysById(Integer userSysId) {
 		if(userSysId == null) {
 			return null;
 		}
-		return dao.findEntityById("userSysId", userSysId, TblUserSys.class);
+		return entityDao.findEntityById("userSysId", userSysId, TblUserSys.class);
 	}
 	
 	/**
@@ -56,24 +54,22 @@ public class SSOSysService {
 	 * @param sys
 	 * @return
 	 */
-	@Transactional
 	public List<?> findSysByExample(TblSystem sys) {
-		return dao.queryByExample(sys, "sysName", true);
+		return entityDao.queryByExample(sys, "sysName", true);
 	}
 
 	/**
 	 * Delete an existing Sys entity
 	 * @param Sys
 	 */
-	@Transactional
 	public int deleteSys(TblSystem sys) {
 		if(sys == null || sys.getSysId() == null) {
 			return 0;
 		}
 		String sql = "delete from tbl_user_sys where sys_id=:sysId";
-		dao.executeSQL(sql, sys);
+		entityDao.executeSQL(sql, sys);
 		sql = "delete from tbl_system where sys_Id=:sysId";
-		return dao.executeSQL(sql, sys);
+		return entityDao.executeSQL(sql, sys);
 	}
 
 
@@ -81,7 +77,6 @@ public class SSOSysService {
 	 * Save an existing Sys entity
 	 * @param Sys
 	 */
-	@Transactional
 	public TblSystem saveSys(TblSystem sys) {
 		if(sys == null) {
 			return null;
@@ -100,14 +95,14 @@ public class SSOSysService {
 				}
 			}
 			existingSys.setTokenKey(key);
-			dao.update(existingSys);
+			entityDao.update(existingSys);
 			return existingSys;
 		} else {
 			//生成系统自己的AES 密钥
 			byte[] keyByte = AESCoder.initSecretKey();
 			String key = AESCoder.parseByte2HexStr(keyByte);
 			sys.setTokenKey(key);
-			sys = (TblSystem)dao.save(sys);
+			sys = (TblSystem)entityDao.save(sys);
 			return sys;
 		}
 	}
@@ -117,12 +112,11 @@ public class SSOSysService {
 	 * @param usersys
 	 * @return
 	 */
-	@Transactional
 	public TblUserSys saveUserSys(TblUserSys usersys) {
 		if(usersys == null) {
 			return null;
 		}
-		return (TblUserSys) dao.save(usersys);
+		return (TblUserSys) entityDao.save(usersys);
 	}
 	
 	/**
@@ -130,13 +124,12 @@ public class SSOSysService {
 	 * @param usersys
 	 * @return
 	 */
-	@Transactional
 	public int delUserSys(TblUserSys usersys) {
 		if(usersys == null) {
 			return -1;
 		}
 		String sql = "delete from tbl_user_sys where user_sys_id=:userSysId";
-		return dao.executeSQL(sql, usersys);
+		return entityDao.executeSQL(sql, usersys);
 	}
 	
 	/**
@@ -144,12 +137,11 @@ public class SSOSysService {
 	 * @param userId
 	 * @return
 	 */
-	@Transactional
 	public int delUserSysByUserId(Integer userId) {
 		TblUser user = new TblUser();
 		user.setUserId(userId);
 		String sql = "delete from tbl_user_sys where user_id=:userId";
-		return dao.executeSQL(sql, user);
+		return entityDao.executeSQL(sql, user);
 	}
 	
 	/**
@@ -157,12 +149,11 @@ public class SSOSysService {
 	 * @param sysId
 	 * @return
 	 */
-	@Transactional
 	public int delUserSysBySysId(Integer sysId) {
 		TblSystem sys = new TblSystem();
 		sys.setSysId(sysId);
 		String sql = "delete from tbl_user_sys where sys_id=:sysId";
-		return dao.executeSQL(sql, sys);
+		return entityDao.executeSQL(sql, sys);
 	}
 	
 	/**
@@ -170,13 +161,12 @@ public class SSOSysService {
 	 * @param usersys
 	 * @return
 	 */
-	@Transactional
 	public int delUserSysByUserIdAndSysId(TblUserSys usersys) {
 		if(usersys == null) {
 			return 0;
 		}
 		String sql = "delete from tbl_user_sys where sys_id=:sysId and user_id=:userId";
-		return dao.executeSQL(sql, usersys);
+		return entityDao.executeSQL(sql, usersys);
 	}
 	
 	/**
@@ -187,15 +177,14 @@ public class SSOSysService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listSys(TblSystem sys, String orderField, Integer thePage, Integer pageSize) {
 		if(orderField == null || orderField.isEmpty()) {
 			orderField = "sysName";
 		}
 		PageUtil pu = new PageUtil();
-		List<?> list = dao.queryByExample(sys, orderField, true);
+		List<?> list = entityDao.queryByExample(sys, orderField, true);
 		pu.setDataSet(list);
-		int count = new Integer(dao.createQuery("select count(o) from TblSystem o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblSystem o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}
@@ -208,7 +197,6 @@ public class SSOSysService {
 	 * @param pageSize
 	 * @return
 	 */
-	@Transactional
 	public PageUtil listSysUser(TblSystem sys, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
 		String select = "select t1.*, t2.login_name";
@@ -223,13 +211,13 @@ public class SSOSysService {
 		sql.append(from);
 		sql.append(where);
 		sql.append(order);
-		List<?> list = dao.queryNativeSQLAsBean(sql.toString(), sys, DwzRowItem.class, thePage, pageSize);
+		List<?> list = entityDao.queryNativeSQLAsBean(sql.toString(), sys, DwzRowItem.class, thePage, pageSize);
 		sql = new StringBuffer("");
 		sql.append("select count(t1.user_sys_id)");
 		sql.append(from);
 		sql.append(where);
 		pu.setDataSet(list);
-		Map<?, ?> cl = dao.queryNativeSQL(sql.toString(), sys, thePage, pageSize).get(0);
+		Map<?, ?> cl = entityDao.queryNativeSQL(sql.toString(), sys, thePage, pageSize).get(0);
 		int count = cl==null||cl.isEmpty()?0:new Integer(cl.get("count").toString());
 		pu.setTotalCount(count);
 		return pu;
@@ -240,14 +228,13 @@ public class SSOSysService {
 	 * @param user
 	 * @return
 	 */
-	@Transactional
 	public List<UserSysModel> listUserSysByUser(TblUser user) {
 		String sql = "select t1.sys_id,t1.sys_name,t1.sys_url,t1.login_field,t1.pwd_field,t1.login_flag1,t1.token_key,t1.security_level as securityLevel," +
 				"t2.sysuser_id,t2.sysuser_pwd,t2.sysuser_type,t2.sid,t2.sid_time,t2.field1 " +
 				"from tbl_system t1,tbl_user_sys t2 " +
 				"where t1.sys_id=t2.sys_id and t1.sys_status='1' and t2.user_id=:userId";
 		@SuppressWarnings("unchecked")
-		List<UserSysModel> list = (List<UserSysModel>) dao.queryNativeSQLAsBean(sql, user, UserSysModel.class, 1, -1);
+		List<UserSysModel> list = (List<UserSysModel>) entityDao.queryNativeSQLAsBean(sql, user, UserSysModel.class, 1, -1);
 		return list;
 	}
 }

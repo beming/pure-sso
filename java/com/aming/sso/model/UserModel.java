@@ -11,6 +11,8 @@ public class UserModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 1738295262312554125L;
 	private Integer user_id;
+	private Integer dep_id;
+	private String dep_name;
 	private Integer post_id;
 	private String post_name;
 	private String login_name;
@@ -29,6 +31,20 @@ public class UserModel implements Serializable {
 	private String addr;
 	private String email;
 	private String remark;
+	
+	public Integer getDep_id() {
+		return dep_id;
+	}
+	public void setDep_id(Integer dep_id) {
+		this.dep_id = dep_id;
+	}
+	
+	public String getDep_name() {
+		return dep_name;
+	}
+	public void setDep_name(String dep_name) {
+		this.dep_name = dep_name;
+	}
 	public Date getChg_pwd_date() {
 		return chg_pwd_date;
 	}

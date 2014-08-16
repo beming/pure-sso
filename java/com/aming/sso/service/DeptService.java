@@ -21,34 +21,31 @@ public class DeptService {
 	protected final transient Log log = LogFactory.getLog(DeptService.class);
 
 	@Autowired
-	private BaseDaoImpl dao;
+	private BaseDaoImpl entityDao;
 
 	/**
 	 */
-	@Transactional
 	public TblDepartment findDeptById(Integer depId) {
 		if(depId == null) {
 			return null;
 		}
-		return dao.findEntityById("depId", depId, TblDepartment.class);
+		return entityDao.findEntityById("depId", depId, TblDepartment.class);
 	}
 
-	@Transactional
 	public List<?> findDeptsByExample(TblDepartment dept) {
-		return dao.queryByExample(dept, true, "depName");
+		return entityDao.queryByExample(dept, true, "depName");
 	}
 	
 	/**
 	 * Delete an existing Dept entity
 	 * @param Dept
 	 */
-	@Transactional
 	public int deleteDept(TblDepartment dept) {
 		if(dept == null || dept.getDepId() == null) {
 			return 0;
 		}
 		String sql = "update tbl_department set dep_status=0 where dep_id=:depId";
-		return dao.executeSQL(sql, dept);
+		return entityDao.executeSQL(sql, dept);
 	}
 
 
@@ -56,7 +53,6 @@ public class DeptService {
 	 * Save an existing Dept entity
 	 * @param Dept
 	 */
-	@Transactional
 	public TblDepartment saveDept(TblDepartment dept) {
 		if(dept == null) {
 			return null;
@@ -73,15 +69,14 @@ public class DeptService {
 					e.printStackTrace();
 				}
 			}
-			dao.update(existingDept);
+			entityDao.update(existingDept);
 			return existingDept;
 		} else {
-			dept = (TblDepartment)dao.save(dept);
+			dept = (TblDepartment)entityDao.save(dept);
 			return dept;
 		}
 	}
 	
-	@Transactional
 	public PageUtil listDepts(TblDepartment dept, String nativeOrderField, Integer thePage, Integer pageSize) {
 		PageUtil pu = new PageUtil();
 		if(nativeOrderField == null || nativeOrderField.isEmpty()) {
@@ -97,9 +92,9 @@ public class DeptService {
 			sql.append(" and td.dep_status=:depStatus");
 		}
 		sql.append(" order by td." + nativeOrderField);
-		List<?> list = dao.queryNativeSQLAsBean(sql.toString(), dept, DeptModel.class, thePage, pageSize);
+		List<?> list = entityDao.queryNativeSQLAsBean(sql.toString(), dept, DeptModel.class, thePage, pageSize);
 		pu.setDataSet(list);
-		int count = new Integer(dao.createQuery("select count(o) from TblDepartment o", 1, -1).get(0).toString());
+		int count = new Integer(entityDao.createQuery("select count(o) from TblDepartment o", 1, -1).get(0).toString());
 		pu.setTotalCount(count);
 		return pu;
 	}
