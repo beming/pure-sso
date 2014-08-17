@@ -1,6 +1,6 @@
-ï»¿/*==============================================================*/
+/*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/8/14 æ˜ŸæœŸå›› ä¸‹åˆ 23:28:35                    */
+/* Created on:     2014-8-17 11:25:56                           */
 /*==============================================================*/
 
 
@@ -28,6 +28,9 @@ create table tbl_department
    dep_id               int not null auto_increment,
    dep_code             varchar(32),
    dep_name             varchar(32) not null,
+   parent_dep_id        int not null,
+   dep_level            int not null comment '0-²¿ÃÅÁĞ±í',
+   dep_level_code       varchar(32),
    dep_status           numeric(2,0) not null,
    dep_linker           varchar(32),
    dep_phone            varchar(32),
@@ -48,8 +51,8 @@ create table tbl_menu
    navcode              varchar(32),
    menu_img             varchar(64),
    menu_sort            int,
-   parent_id            int not null comment '0ä¸ºæ¨¡å—
-            å…¶ä»–ä¸ºå­èœå•',
+   parent_id            int not null comment '0ÎªÄ£¿é
+            ÆäËûÎª×Ó²Ëµ¥',
    menu_level           int,
    menu_status          numeric(1,0),
    is_menu              numeric(1,0),
@@ -68,7 +71,7 @@ create table tbl_operator_log
    operator_user        int not null,
    operator_ip          varchar(32) not null,
    operator_level       varchar(32) not null,
-   operator_time        datetime not null,
+   operator_time        date not null,
    operator_content     varchar(1024) not null,
    primary key (operator_id)
 );
@@ -79,6 +82,7 @@ create table tbl_operator_log
 create table tbl_post
 (
    post_id              int not null auto_increment,
+   dep_id               int not null,
    post_name            varchar(32) not null,
    post_status          numeric(2,0) not null,
    post_remark          varchar(1024),
@@ -103,8 +107,8 @@ create table tbl_role
 create table tbl_role_menu
 (
    role_menu_id         int not null auto_increment,
-   role_id              int,
-   menu_id              int,
+   role_id              int not null,
+   menu_id              int not null,
    r_select             numeric(1,0) not null,
    r_add                numeric(1,0) not null,
    r_update             numeric(1,0) not null,
@@ -125,9 +129,9 @@ create table tbl_user
    user_name            varchar(32) not null,
    passwd               varchar(32) not null,
    chg_pwd_date         date,
-   status               numeric(2,0) not null comment '0ã€-1 ï¼šæ— æ•ˆ
-            1ï¼šæœ‰æ•ˆ
-            9ï¼šè¢«é”',
+   status               numeric(2,0) not null comment '0¡¢-1 £ºÎŞĞ§
+            1£ºÓĞĞ§
+            9£º±»Ëø',
    id_type              numeric(1,0),
    id_num               varchar(32),
    sexy                 numeric(1,0) comment '0 female
@@ -139,7 +143,7 @@ create table tbl_user
    addr                 varchar(1024),
    post_code            varchar(32),
    email                varchar(32),
-   last_login_time      datetime,
+   last_login_time      date,
    remark               varchar(1024),
    primary key (user_id)
 );
@@ -150,25 +154,23 @@ create table tbl_user
 create table tbl_user_role
 (
    user_role_id         int not null auto_increment,
-   role_id              int,
-   user_id              int,
+   role_id              int not null,
+   user_id              int not null,
    primary key (user_role_id)
 );
 
-
-
 /*==============================================================*/
-/* Init the system admin's infoï¼Œadmin:ssoAdmin                 */
+/* Init the system admin's info£¬admin:ssoAdmin                 */
 /*==============================================================*/
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (1, 'éƒ¨é—¨ç®¡ç†', '/dept.do?tag=list', 's1', '', 1, 0, 1, 1, '1', 0, '', '');
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (2, 'å²—ä½ç®¡ç†', '/post.do?tag=list', 's2', '', 2, 0, 1, 1, '1', 0, '', '');
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (3, 'èœå•ç®¡ç†', '/menu.do?tag=list', 's3', '', 3, 0, 1, 1, '1', 0, '', '');
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (4, 'è§’è‰²ç®¡ç†', '/role.do?tag=list', 's4', '', 4, 0, 1, 1, '1', 0, '', '');
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (5, 'ç”¨æˆ·ç®¡ç†', '/user.do?tag=list', 's5', '', 5, 0, 1, 1, '1', 0, '', '');
-insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (6, 'ä¿®æ”¹ä¸ªäººå¯†ç ', '/user.do?tag=chgPwd', 's6', '', 6, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (1, '²¿ÃÅ¹ÜÀí', '/dept.do?tag=list', 's1', '', 1, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (2, '¸ÚÎ»¹ÜÀí', '/post.do?tag=list', 's2', '', 2, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (3, '²Ëµ¥¹ÜÀí', '/menu.do?tag=list', 's3', '', 3, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (4, '½ÇÉ«¹ÜÀí', '/role.do?tag=list', 's4', '', 4, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (5, 'ÓÃ»§¹ÜÀí', '/user.do?tag=list', 's5', '', 5, 0, 1, 1, '1', 0, '', '');
+insert into tbl_menu (menu_id, menu_name, menu_url, navcode, menu_img, menu_sort, parent_id, menu_level, menu_status, is_menu, top_menu_flag, menu_field, menu_remark) values (6, 'ĞŞ¸Ä¸öÈËÃÜÂë', '/user.do?tag=chgPwd', 's6', '', 6, 0, 1, 1, '1', 0, '', '');
 alter table tbl_menu AUTO_INCREMENT=7;
 
-insert into tbl_role (role_id, role_name, role_status, role_remark) values (1, 'è¶…çº§ç®¡ç†å‘˜', 1, '');
+insert into tbl_role (role_id, role_name, role_status, role_remark) values (1, '³¬¼¶¹ÜÀíÔ±', 1, '');
 alter table tbl_role AUTO_INCREMENT=2;
 
 insert into tbl_role_menu (role_menu_id, role_id, menu_id, r_select, r_add, r_update, r_del, r_exec) values (1, 1, 1, 1, 1, 1, 1, 1);
@@ -180,7 +182,7 @@ insert into tbl_role_menu (role_menu_id, role_id, menu_id, r_select, r_add, r_up
 alter table tbl_role_menu AUTO_INCREMENT=7;
 
 /*===============================================================*/
-/*  adminçš„å¯†ç ä¸ºssoAdmin                                        */
+/*  adminµÄÃÜÂëÎªssoAdmin                                        */
 /*===============================================================*/
 insert into tbl_user(user_id,login_name,user_name,passwd,status) values (1,'admin','administrator','A720BD0603C6465ED4F4420DDB0AFC94',1);
 alter table tbl_user AUTO_INCREMENT=2;
