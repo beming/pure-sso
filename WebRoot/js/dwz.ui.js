@@ -110,33 +110,20 @@ function initUI(_box){
 	}
 	
 	if ($.fn.uploadify) {
-		$(":file[uploader]", $p).each(function(){
+		$(":file[uploaderOption]", $p).each(function(){
 			var $this = $(this);
 			var options = {
-				uploader: $this.attr("uploader"),
-				script: $this.attr("script"),
-				buttonImg: $this.attr("buttonImg"),
-				cancelImg: $this.attr("cancelImg"),
-				queueID: $this.attr("fileQueue") || "fileQueue",
-				fileDesc: $this.attr("fileDesc"),
-				fileExt : $this.attr("fileExt"),
-				folder	: $this.attr("folder"),
-				fileDataName: $this.attr("name") || "file",
-				auto: $this.attr("auto") || false,
+				fileObjName: $this.attr("name") || "file",
+				auto: true,
 				multi: true,
-				onError:uploadifyError,
-				onComplete: uploadifyComplete,
-				onAllComplete: uploadifyAllComplete
+				onUploadError: uploadifyError
 			};
-			if ($this.attr("onComplete")) {
-				options.onComplete = DWZ.jsonEval($this.attr("onComplete"));
-			}
-			if ($this.attr("onAllComplete")) {
-				options.onAllComplete = DWZ.jsonEval($this.attr("onAllComplete"));
-			}
-			if ($this.attr("scriptData")) {
-				options.scriptData = DWZ.jsonEval($this.attr("scriptData"));
-			}
+			
+			var uploaderOption = DWZ.jsonEval($this.attr("uploaderOption"));
+			$.extend(options, uploaderOption);
+
+			DWZ.debug("uploaderOption: "+DWZ.obj2str(uploaderOption));
+			
 			$this.uploadify(options);
 		});
 	}
@@ -217,7 +204,7 @@ function initUI(_box){
 			event.preventDefault();
 		});
 	});
-	
+
 	//dialogs
 	$("a[target=dialog]", $p).each(function(){
 		$(this).click(function(event){
@@ -290,7 +277,10 @@ function initUI(_box){
 	if ($.fn.selectedTodo) $("a[target=selectedTodo]", $p).selectedTodo();
 	if ($.fn.pagerForm) $("form[rel=pagerForm]", $p).pagerForm({parentBox:$p});
 
-	// 这里放其他第三方jQuery插件...
+	// 执行第三方jQuery插件【 第三方jQuery插件注册：DWZ.regPlugins.push(function($p){}); 】
+	$.each(DWZ.regPlugins, function(index, fn){
+		fn($p);
+	});
 }
 
 

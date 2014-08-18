@@ -229,7 +229,7 @@
 					var $th = $(this);
 					var field = {
 						type: $th.attr("type") || "text",
-						patternDate: $th.attr("format") || "yyyy-MM-dd",
+						patternDate: $th.attr("dateFmt") || "yyyy-MM-dd",
 						name: $th.attr("name") || "",
 						defaultVal: $th.attr("defaultVal") || "",
 						size: $th.attr("size") || "12",
@@ -304,7 +304,7 @@
 			 */
 			function initSuffix($tbody) {
 				$tbody.find('>tr').each(function(i){
-					$(':input, a.btnLook', this).each(function(){
+					$(':input, a.btnLook, a.btnAttach', this).each(function(){
 						var $this = $(this), name = $this.attr('name'), val = $this.val();
 
 						if (name) $this.attr('name', name.replaceSuffix(i));
@@ -352,7 +352,7 @@
 					case 'attach':
 						html = '<input type="hidden" name="'+field.lookupGroup+'.'+field.lookupPk+suffix+'"/>'
 							+ '<input type="text" name="'+field.name+'" size="'+field.size+'" readonly="readonly" class="'+field.fieldClass+'"/>'
-							+ '<a class="btnAttach" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suggestFrag+' lookupPk="'+field.lookupPk+'" width="560" height="300" title="查找带回">查找带回</a>';
+							+ '<a class="btnAttach" href="'+field.lookupUrl+'" lookupGroup="'+field.lookupGroup+'" '+suffixFrag+' lookupPk="'+field.lookupPk+'" width="560" height="300" title="查找带回">查找带回</a>';
 						break;
 					case 'enum':
 						$.ajax({
@@ -365,11 +365,11 @@
 						});
 						break;
 					case 'date':
-						html = '<input type="text" name="'+field.name+'" value="'+field.defaultVal+'" class="date '+field.fieldClass+'" format="'+field.patternDate+'" size="'+field.size+'"/>'
+						html = '<input type="text" name="'+field.name+'" value="'+field.defaultVal+'" class="date '+field.fieldClass+'" dateFmt="'+field.patternDate+'" size="'+field.size+'"/>'
 							+'<a class="inputDateButton" href="javascript:void(0)">选择</a>';
 						break;
 					default:
-						html = '<input type="text" name="'+field.name+'" value="'+field.defaultVal+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
+						html = '<input type="'+field.type+'" name="'+field.name+'" value="'+field.defaultVal+'" size="'+field.size+'" class="'+field.fieldClass+'" '+attrFrag+'/>';
 						break;
 				}
 				return '<td>'+html+'</td>';
