@@ -1,9 +1,9 @@
 AsyncCacheClassAndMethod=
 cacheClassAndMethod=
 InterceptorIngorClass=com.aming.sso.cache.CacheService,com.aming.sso.controller.LoginController
-InterceptorIngorSession=loginUser,loginAdmin
-InterceptorIngorSession=/login.do
-addSessionFile=TAG1:file1,TAG2:file2
+InterceptorIngorSession=
+InterceptorForwardUrl=/login.do
+addSessionFile=
 canUpgrade=false
 clientVer=1.0
 openGetPwd:true

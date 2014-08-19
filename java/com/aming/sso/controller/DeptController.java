@@ -21,10 +21,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.alibaba.fastjson.serializer.SerializeWriter;
+import com.aming.sso.ContextDefine;
 import com.aming.sso.entity.TblDepartment;
+import com.aming.sso.entity.TblMenu;
+import com.aming.sso.entity.TblUser;
 import com.aming.sso.model.DwzCallBackModel;
+import com.aming.sso.model.PurviewModel;
 import com.aming.sso.service.DeptService;
 import com.sendtend.util.BeanTool;
+import com.sendtend.util.MD5;
 import com.sendtend.util.PageUtil;
 import com.sendtend.util.StringUtil;
 
@@ -130,13 +135,42 @@ public class DeptController extends MultiActionController {
 		        }
 		        return false;
 		    }
-		};
+		}; 
 		SerializeWriter out = new SerializeWriter();
 		JSONSerializer serializer = new JSONSerializer(out);
 		serializer.getPropertyFilters().add(filter);
 		serializer.write(list);
 		log.debug("----------" + out.toString());
 		return StringUtil.toChartset(out.toString(), "UTF-8", "ISO8859-1");
+	}
+	
+	@RequestMapping(params = "tag=deptTreeLookup")
+	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap map, TblDepartment dep) {
+		/*
+		 * 获取部门tree
+		 */
+		//处理业务菜单
+		PageUtil pu = deptService.listDepts(dep, "depId", -1, 100);
+		List<TblDepartment> tmpList = (List<TblDepartment>) pu.getDataSet();
+		StringBuffer cateHtml = new StringBuffer("");
+		//子循环标志
+		boolean subR = true;
+		boolean hasSub = false;
+		//boolean top3L = false;
+		boolean top1Sub = false;
+		boolean top1flag = false;
+		for(TblDepartment tm:tmpList) {
+			top1Sub = false;
+			top1flag = true;
+			
+				cateHtml.append("</li>");
+		}
+		if(log.isDebugEnabled()) {
+			log.debug("-----------------get menu tree result:");
+			log.debug(cateHtml);
+		}
+		request.setAttribute("cateHtml", cateHtml);
+		return "dept/deptTreeLookup";
 	}
 	
 	/**

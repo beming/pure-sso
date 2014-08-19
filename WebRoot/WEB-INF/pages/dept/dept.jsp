@@ -9,8 +9,18 @@
 		<input type="hidden" name="rel" value="${rel}"/>
 		<fieldset>
 		<p>
+			<label>部门编码：</label>
+			<form:input class="required" path="depCode" />
+		</p>
+		<p>
 			<label>部门名称：</label>
 			<form:input class="required" path="depName" />
+		</p>
+		<p>
+			<label>上级部门：</label>
+			<input name="parentDepId" value="" type="hidden"/>
+			<input class="required" name="depName" type="text" readonly/>
+			<a class="btnLook" href="/dept.do?tag=depTreeLookup" lookupGroup="">查找带回</a>
 		</p>
 		<p>
 			<label>状态：</label>
