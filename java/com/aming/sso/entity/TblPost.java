@@ -19,8 +19,9 @@ public class TblPost implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3535282233307822719L;
+	private static final long serialVersionUID = -6600250972372326953L;
 	private Integer postId;
+	private Integer depId;
 	private String postName;
 	private Byte postStatus;
 	private String postRemark;
@@ -32,13 +33,15 @@ public class TblPost implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public TblPost(String postName, Byte postStatus) {
+	public TblPost(Integer depId, String postName, Byte postStatus) {
+		this.depId = depId;
 		this.postName = postName;
 		this.postStatus = postStatus;
 	}
 
 	/** full constructor */
-	public TblPost(String postName, Byte postStatus, String postRemark) {
+	public TblPost(Integer depId, String postName, Byte postStatus, String postRemark) {
+		this.depId = depId;
 		this.postName = postName;
 		this.postStatus = postStatus;
 		this.postRemark = postRemark;
@@ -54,6 +57,15 @@ public class TblPost implements java.io.Serializable {
 
 	public void setPostId(Integer postId) {
 		this.postId = postId;
+	}
+
+	@Column(name = "dep_id", nullable = false)
+	public Integer getDepId() {
+		return this.depId;
+	}
+
+	public void setDepId(Integer depId) {
+		this.depId = depId;
 	}
 
 	@Column(name = "post_name", nullable = false, length = 32)

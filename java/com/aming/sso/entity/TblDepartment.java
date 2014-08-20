@@ -19,10 +19,13 @@ public class TblDepartment implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6727718035134982361L;
+	private static final long serialVersionUID = 8694756817777942516L;
 	private Integer depId;
 	private String depCode;
 	private String depName;
+	private Integer parentDepId;
+	private Integer depLevel;
+	private String depLevelCode;
 	private Byte depStatus;
 	private String depLinker;
 	private String depPhone;
@@ -37,16 +40,21 @@ public class TblDepartment implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public TblDepartment(String depName, Byte depStatus) {
+	public TblDepartment(String depName, Integer parentDepId, Integer depLevel, Byte depStatus) {
 		this.depName = depName;
+		this.parentDepId = parentDepId;
+		this.depLevel = depLevel;
 		this.depStatus = depStatus;
 	}
 
 	/** full constructor */
-	public TblDepartment(String depCode, String depName, Byte depStatus, String depLinker, String depPhone, String depEmail,
-			String depTeacher, String depRemark) {
+	public TblDepartment(String depCode, String depName, Integer parentDepId, Integer depLevel, String depLevelCode, Byte depStatus, String depLinker,
+			String depPhone, String depEmail, String depTeacher, String depRemark) {
 		this.depCode = depCode;
 		this.depName = depName;
+		this.parentDepId = parentDepId;
+		this.depLevel = depLevel;
+		this.depLevelCode = depLevelCode;
 		this.depStatus = depStatus;
 		this.depLinker = depLinker;
 		this.depPhone = depPhone;
@@ -83,6 +91,33 @@ public class TblDepartment implements java.io.Serializable {
 
 	public void setDepName(String depName) {
 		this.depName = depName;
+	}
+
+	@Column(name = "parent_dep_id", nullable = false)
+	public Integer getParentDepId() {
+		return this.parentDepId;
+	}
+
+	public void setParentDepId(Integer parentDepId) {
+		this.parentDepId = parentDepId;
+	}
+
+	@Column(name = "dep_level", nullable = false)
+	public Integer getDepLevel() {
+		return this.depLevel;
+	}
+
+	public void setDepLevel(Integer depLevel) {
+		this.depLevel = depLevel;
+	}
+
+	@Column(name = "dep_level_code", length = 32)
+	public String getDepLevelCode() {
+		return this.depLevelCode;
+	}
+
+	public void setDepLevelCode(String depLevelCode) {
+		this.depLevelCode = depLevelCode;
 	}
 
 	@Column(name = "dep_status", nullable = false, precision = 2, scale = 0)

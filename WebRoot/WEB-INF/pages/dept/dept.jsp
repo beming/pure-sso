@@ -5,6 +5,8 @@
 <form:form id="form1" action="/dept.do" commandName="TblDepartment" method="post" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 	<div class="pageFormContent nowrap" layoutH="137">
 		<form:hidden path="depId"/>
+		<form:hidden path="depLevel"/>
+		<form:hidden path="depLevelCode"/>
 		<input type="hidden" name="tag" value="${tag}" />
 		<input type="hidden" name="rel" value="${rel}"/>
 		<fieldset>
@@ -18,7 +20,7 @@
 		</p>
 		<p>
 			<label>上级部门：</label>
-			<input name="parentDepId" value="" type="hidden"/>
+			<form:hidden path="parentDepId"/>
 			<input class="required" name="depName" type="text" readonly/>
 			<a class="btnLook" href="/dept.do?tag=depTreeLookup" lookupGroup="">查找带回</a>
 		</p>

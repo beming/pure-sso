@@ -41,7 +41,7 @@ public class DeptController extends MultiActionController {
 	private DeptService deptService;
 	
 	@RequestMapping
-	public String toDept(HttpServletRequest request, HttpServletResponse response, HttpSession session, @RequestParam String rel) {
+	public String toDept(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap map, @RequestParam String rel) {
 		if(log.isDebugEnabled()) {
 			log.debug(" ----- call toDept:");
 		}
@@ -188,6 +188,9 @@ public class DeptController extends MultiActionController {
 		request.setAttribute("tag", "save");
 		TblDepartment dept = new TblDepartment();
 		dept.setDepStatus(new Byte("1"));
+		dept.setParentDepId(0);
+		dept.setDepLevel(1);
+		dept.setDepLevelCode("1");
 		map.put("TblDepartment", dept);
 		return "dept/dept";
 	}
