@@ -213,3 +213,6 @@ pip-log.txt
 
 WebRoot/WEB-INF/classes/
 db/pgsql/
+.classpath
+.myhibernatedata
+config/hibernate/druid.mysql

@@ -11,6 +11,9 @@ public class DeptModel implements Serializable {
 	private static final long serialVersionUID = 1738295262312554125L;
 	private Integer dep_id;
 	private String dep_code;
+	private String dep_level_code;
+	private Integer dep_level;
+	private Integer parent_dep_id;
 	private String dep_name;
 	private String dep_image;
 	private BigDecimal dep_status;
@@ -22,6 +25,25 @@ public class DeptModel implements Serializable {
 	private String dep_teacher;
 	private String dep_student;
 	private String dep_remark;
+	
+	public String getDep_level_code() {
+		return dep_level_code;
+	}
+	public void setDep_level_code(String dep_level_code) {
+		this.dep_level_code = dep_level_code;
+	}
+	public Integer getDep_level() {
+		return dep_level;
+	}
+	public void setDep_level(Integer dep_level) {
+		this.dep_level = dep_level;
+	}
+	public Integer getParent_dep_id() {
+		return parent_dep_id;
+	}
+	public void setParent_dep_id(Integer parent_dep_id) {
+		this.parent_dep_id = parent_dep_id;
+	}
 	public Integer getDep_id() {
 		return dep_id;
 	}
